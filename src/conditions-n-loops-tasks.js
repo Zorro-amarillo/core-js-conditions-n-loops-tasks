@@ -76,8 +76,91 @@ function getMaxNumber(a, b, c) {
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  */
-function canQueenCaptureKing(/* queen, king */) {
-  throw new Error('Not implemented');
+function canQueenCaptureKing(queen, king) {
+  const kingPos = Object.values(king);
+  let queenMove;
+  let i;
+  let j;
+
+  if (queen.x === king.x || queen.y === king.y) {
+    return true;
+  }
+
+  const checkMove = () => {
+    queenMove = [queen.x + i, queen.y + j];
+
+    if (queenMove[0] === kingPos[0] && queenMove[1] === kingPos[1]) {
+      return true;
+    }
+
+    return false;
+  };
+
+  // Right Top Move = x++, y++
+  if (queen.x < king.x || queen.y < king.y) {
+    queenMove = [queen.x, queen.y];
+    i = 1;
+    j = 1;
+
+    while (queenMove[0] < 8 && queenMove[1] < 8) {
+      if (checkMove()) {
+        return true;
+      }
+
+      i += 1;
+      j += 1;
+    }
+  }
+
+  // Left Bottom Move = x--, y--
+  if (queen.x > king.x || queen.y > king.y) {
+    queenMove = [queen.x, queen.y];
+    i = -1;
+    j = -1;
+
+    while (queenMove[0] > 1 && queenMove[1] > 1) {
+      if (checkMove()) {
+        return true;
+      }
+
+      i += -1;
+      j += -1;
+    }
+  }
+
+  // Right Bottom Move = x++, y--
+  if (queen.x < king.x || queen.y > king.y) {
+    queenMove = [queen.x, queen.y];
+    i = 1;
+    j = -1;
+
+    while (queenMove[0] < 8 && queenMove[1] > 1) {
+      if (checkMove()) {
+        return true;
+      }
+
+      i += 1;
+      j += -1;
+    }
+  }
+
+  // Left Top Move = x--, y++
+  if (queen.x > king.x || queen.y < king.y) {
+    queenMove = [queen.x, queen.y];
+    i = -1;
+    j = 1;
+
+    while (queenMove[1] < 8 && queenMove[0] > 1) {
+      if (checkMove()) {
+        return true;
+      }
+
+      i += -1;
+      j += 1;
+    }
+  }
+
+  return false;
 }
 
 /**
@@ -128,8 +211,57 @@ function isIsoscelesTriangle(a, b, c) {
  *  10  => X
  *  26  => XXVI
  */
-function convertToRomanNumerals(/* num */) {
-  throw new Error('Not implemented');
+function convertToRomanNumerals(num) {
+  const firstDigit = +`${num}`[0];
+  const lastDigit = +`${num}`[`${num}`.length - 1];
+  const ten = 'X';
+  let romanDigit;
+  let str = '';
+
+  switch (lastDigit) {
+    case 0:
+      romanDigit = '';
+      break;
+    case 1:
+      romanDigit = 'I';
+      break;
+    case 2:
+      romanDigit = 'II';
+      break;
+    case 3:
+      romanDigit = 'III';
+      break;
+    case 4:
+      romanDigit = 'IV';
+      break;
+    case 5:
+      romanDigit = 'V';
+      break;
+    case 6:
+      romanDigit = 'VI';
+      break;
+    case 7:
+      romanDigit = 'VII';
+      break;
+    case 8:
+      romanDigit = 'VIII';
+      break;
+    case 9:
+      romanDigit = 'IX';
+      break;
+    default:
+      romanDigit = '';
+  }
+
+  if (`${num}`.length === 1) {
+    return romanDigit;
+  }
+
+  for (let i = 1; i <= firstDigit; i += 1) {
+    str += ten;
+  }
+
+  return str + romanDigit;
 }
 
 /**
@@ -290,8 +422,25 @@ function isContainNumber(num, digit) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  for (let i = 1; i < arr.length - 1; i += 1) {
+    let leftSum = 0;
+    let rightSum = 0;
+
+    for (let j = 0; j < i; j += 1) {
+      leftSum += arr[j];
+    }
+
+    for (let k = i + 1; k < arr.length; k += 1) {
+      rightSum += arr[k];
+    }
+
+    if (leftSum === rightSum) {
+      return i;
+    }
+  }
+
+  return -1;
 }
 
 /**
@@ -377,8 +526,10 @@ function shuffleChar(str, iterations) {
   let newStr = str;
   let newStrBegin;
   let newStrEnd;
+  let counter = 0;
+  let iterationsNum;
 
-  for (let i = 1; i <= iterations; i += 1) {
+  const getResult = () => {
     newStrBegin = '';
     newStrEnd = '';
 
@@ -391,9 +542,34 @@ function shuffleChar(str, iterations) {
     }
 
     newStr = newStrBegin + newStrEnd;
+
+    return newStr;
+  };
+
+  for (let i = 1; i <= iterations; i += 1) {
+    getResult();
+    counter += 1;
+
+    if (newStr === str) {
+      break;
+    }
   }
+
+  if (iterations === counter) {
+    iterationsNum = iterations;
+  } else {
+    iterationsNum = iterations % counter === 0 ? counter : iterations % counter;
+  }
+
+  newStr = str;
+
+  for (let i = 1; i <= iterationsNum; i += 1) {
+    getResult();
+  }
+
   return newStr;
 }
+
 /**
  * Returns the nearest largest integer consisting of the digits of the given positive integer.
  * If there is no such number, it returns the original number.
