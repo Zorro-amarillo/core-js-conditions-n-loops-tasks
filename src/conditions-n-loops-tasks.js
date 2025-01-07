@@ -96,7 +96,6 @@ function canQueenCaptureKing(queen, king) {
     return false;
   };
 
-  // Right Top Move = x++, y++
   if (queen.x < king.x || queen.y < king.y) {
     queenMove = [queen.x, queen.y];
     i = 1;
@@ -112,7 +111,6 @@ function canQueenCaptureKing(queen, king) {
     }
   }
 
-  // Left Bottom Move = x--, y--
   if (queen.x > king.x || queen.y > king.y) {
     queenMove = [queen.x, queen.y];
     i = -1;
@@ -128,7 +126,6 @@ function canQueenCaptureKing(queen, king) {
     }
   }
 
-  // Right Bottom Move = x++, y--
   if (queen.x < king.x || queen.y > king.y) {
     queenMove = [queen.x, queen.y];
     i = 1;
@@ -144,7 +141,6 @@ function canQueenCaptureKing(queen, king) {
     }
   }
 
-  // Left Top Move = x--, y++
   if (queen.x > king.x || queen.y < king.y) {
     queenMove = [queen.x, queen.y];
     i = -1;
